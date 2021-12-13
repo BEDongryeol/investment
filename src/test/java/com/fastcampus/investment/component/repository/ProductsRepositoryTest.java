@@ -34,7 +34,7 @@ class ProductsRepositoryTest {
     @DisplayName("날짜가 유효한 상품 조회")
     @Test
     void test_2(){
-        List<ProductsEntity> products = productsRepository.findByStartedAtLessThanEqualAndFinishedAtGreaterThanEqual(LocalDate.now(), LocalDate.now());
+        List<ProductsEntity> products = productsRepository.getValidProducts();
         products.forEach(System.out::println);
 
     }
