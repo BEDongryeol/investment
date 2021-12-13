@@ -1,8 +1,8 @@
 package com.fastcampus.investment.component.dto;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class ResponseDTO<T> {
 
     private T data;

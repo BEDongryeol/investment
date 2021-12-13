@@ -2,19 +2,17 @@ package com.fastcampus.investment.component.dto;
 
 import com.fastcampus.investment.component.entity.InvestingStatusEntity;
 import com.fastcampus.investment.util.type.UserInvestingType;
-import lombok.Builder;
-import lombok.ToString;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
+@Setter
 public class UserDTO {
     private Long id;
 

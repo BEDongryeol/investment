@@ -6,9 +6,11 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@Data
 @NoArgsConstructor
 @Entity
+@Getter
+@Setter
+@Table(name = "Investing_status")
 public class InvestingStatusEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
