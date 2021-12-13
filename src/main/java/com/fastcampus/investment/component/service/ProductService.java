@@ -24,7 +24,7 @@ public class ProductService {
     public ResponseDTO<List<ProductsDTO>> lookupValidProducts(){
 
         // 1. 유효한 모집기간 상품 조회
-        List<ProductsEntity> products = productsRepository.findByStartedAtLessThanEqualAndFinishedAtGreaterThanEqual(LocalDate.now(), LocalDate.now());
+        List<ProductsEntity> products = productsRepository.getValidProducts();
         // 2. 총 투자 금액이 total 과 같은지 비교하여 제거
         products.removeIf(product -> product.getTotalInvestAmount() == product.getInvestedAmount());
 
@@ -41,7 +41,7 @@ public class ProductService {
     public ProductsEntity selectProduct(Long productsId, Long investAmount){
 
         // 1. 유효한 모집기간 상품 조회
-        List<ProductsEntity> products = productsRepository.findByStartedAtLessThanEqualAndFinishedAtGreaterThanEqual(LocalDate.now(), LocalDate.now());
+        List<ProductsEntity> products = productsRepository.getValidProducts();
         // 2. 총 투자 금액이 total 과 같은지 비교하여 제거
         products.removeIf(product -> product.getTotalInvestAmount() == product.getInvestedAmount());
 
