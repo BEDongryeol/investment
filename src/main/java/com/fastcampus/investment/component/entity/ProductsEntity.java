@@ -15,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "products")
+@ToString
 public class ProductsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +43,6 @@ public class ProductsEntity {
     @JoinColumn(name = "products_id")
     @Builder.Default
     @ToString.Exclude
-    @JsonManagedReference
     private List<InvestingStatusEntity> investingStatus = new ArrayList<>();
 
     public void addInvestingStatus(InvestingStatusEntity... investingStatuses){
