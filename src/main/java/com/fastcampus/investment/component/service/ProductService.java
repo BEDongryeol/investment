@@ -5,6 +5,7 @@ import com.fastcampus.investment.component.dto.ProductsDTO;
 import com.fastcampus.investment.component.dto.response.ResponseDTO;
 import com.fastcampus.investment.component.entity.ProductsEntity;
 import com.fastcampus.investment.component.repository.ProductsRepository;
+import com.fastcampus.investment.exception.APIException;
 import com.fastcampus.investment.util.mapper.ProductsMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.fastcampus.investment.constant.ErrorCode.NO_VALID_PRODUCTS;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +28,9 @@ public class ProductService {
 
         // 유효한 모집기간 상품 조회
         List<ProductsEntity> products = productsRepository.getValidProducts();
+
+        if (products.isEmpty()) throw new APIException(NO_VALID_PRODUCTS);
+
         // Mapping 후 return
         return new ResponseDTO<>(
             products.stream()
