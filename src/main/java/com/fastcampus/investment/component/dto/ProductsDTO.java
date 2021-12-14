@@ -27,9 +27,5 @@ public class ProductsDTO {
     private LocalDate startedAt;
 
     private LocalDate finishedAt;
-    @ToString.Exclude
-    @Builder.Default
-    private List<InvestingStatusDTO> investingStatus = new ArrayList<>();
-
 
 }
