@@ -25,12 +25,10 @@ public class Apis {
     private final InvestingService investingService;
 
     @GetMapping("/product")
-    public ResponseDTO<List<ProductsDTO>> productGet(){
-        return productService.getValidProducts();
-    }
+    public Object productGet(){ return productService.getValidProducts();}
 
     @PostMapping("/investment")
-    public ResponseEntity<ResponseDTO<InvestPutResponseDTO>> investmentPost
+    public Object investmentPost
             (
             @RequestHeader("X-USER-ID") @NotNull Long userId,
             @RequestParam @NotNull Long productId,
@@ -43,21 +41,20 @@ public class Apis {
                 .investAmount(investAmount)
                 .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(investingService.investPost(investPostRequestDTO));
+        return investingService.investPost(investPostRequestDTO);
     }
 
     @GetMapping("/investment")
-    public ResponseEntity<ResponseDTO<List<InvestingStatusDTO>>> investmentGet
+    public Object investmentGet
             (
             @RequestHeader("X-USER-ID") @NotNull Long userId
             )
     {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(investingService.getInvest(userId));
+        return investingService.getInvest(userId);
     }
 
     @PutMapping("/investment/{productId}")
-    public ResponseEntity<ResponseDTO<InvestPutResponseDTO>> investmentPost
+    public Object investmentPost
         (
         @RequestHeader("X-USER-ID") @NotNull Long userId,
         @PathVariable @NotNull Long productId,
@@ -69,7 +66,6 @@ public class Apis {
                 .productId(productId)
                 .status(status)
                 .build();
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(investingService.updateInvest(investPutRequestDTO));
+        return investingService.updateInvest(investPutRequestDTO);
     }
 }
