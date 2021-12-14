@@ -24,7 +24,7 @@ public class RestControllerAspect {
         log.info( "\n[AfterReturning At API]"
                 + "\n>>> Method Name : " + joinPoint.getSignature().getName()
                 + "\n>>> Args : " + Arrays.toString(joinPoint.getArgs())
-                + "\n>>> Return Value : " + returnObj);
+                + "\n>>> Return Value : " + returnObj +"\n");
     }
 
     @Around(value = controllerPointCut)
