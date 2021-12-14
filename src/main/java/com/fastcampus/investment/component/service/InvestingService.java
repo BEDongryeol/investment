@@ -10,6 +10,7 @@ import com.fastcampus.investment.component.entity.ProductsEntity;
 import com.fastcampus.investment.component.entity.UserEntity;
 import com.fastcampus.investment.component.repository.InvestingStatusRepository;
 import com.fastcampus.investment.component.repository.UserRepository;
+import com.fastcampus.investment.exception.APIException;
 import com.fastcampus.investment.util.mapper.InvestingStatusMapper;
 import com.fastcampus.investment.constant.UserInvestingType;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.fastcampus.investment.constant.ErrorCode.INVALID_USER;
+import static com.fastcampus.investment.constant.ErrorCode.NO_INVESTED_DATA;
 
 @Slf4j
 @Service
@@ -50,9 +54,12 @@ public class InvestingService {
 
     @Transactional
     public ResponseDTO<List<InvestingStatusDTO>> getInvest(Long userId){
-        UserEntity user = userRepository.findById(userId).orElseThrow(IllegalAccessError::new);
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new APIException(INVALID_USER));
+        List<InvestingStatusEntity> investmentsOfUser = user.getInvestingStatus();
 
-        return new ResponseDTO<>(InvestingStatusMapper.INSTANCE.toDtoList(user.getInvestingStatus()));
+        if (investmentsOfUser.isEmpty()) throw new APIException(NO_INVESTED_DATA);
+
+        return new ResponseDTO<>(InvestingStatusMapper.INSTANCE.toDtoList(investmentsOfUser));
     }
 
     // Service Layer - Entity 리턴 -> Repository Layer -> Service Layer - DTO 변환
