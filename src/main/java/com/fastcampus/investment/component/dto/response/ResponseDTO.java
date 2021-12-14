@@ -1,4 +1,4 @@
-package com.fastcampus.investment.component.dto;
+package com.fastcampus.investment.component.dto.response;
 
 import lombok.Getter;
 
