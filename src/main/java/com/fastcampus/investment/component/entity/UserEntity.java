@@ -44,7 +44,6 @@ public class UserEntity {
     @JoinColumn(name = "user_id")
     @Builder.Default
     @ToString.Exclude
-    @JsonManagedReference
     private List<InvestingStatusEntity> investingStatus = new ArrayList<>();
 
     public void addInvestingStatus(InvestingStatusEntity... investingStatuses){
