@@ -29,7 +29,6 @@ public class InvestingService {
     private final InvestingStatusRepository investingStatusRepository;
     private final UserRepository userRepository;
 
-
     @Transactional
     public ResponseDTO<InvestPutResponseDTO> investPost(InvestPostRequestDTO investPostRequestDTO){
 
@@ -45,7 +44,7 @@ public class InvestingService {
         }
 
         addInvestingStatus(user, products);
-        log.info("투자 시도 : {}", status);
+        log.info("\n>>> 투자 시도 : {}\n", status);
         return new ResponseDTO<>(new InvestPutResponseDTO(status));
     }
 
