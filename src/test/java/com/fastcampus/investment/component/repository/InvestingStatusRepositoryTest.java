@@ -4,7 +4,8 @@ import com.fastcampus.investment.component.entity.InvestingStatusEntity;
 import com.fastcampus.investment.component.entity.ProductsEntity;
 import com.fastcampus.investment.component.entity.UserEntity;
 import com.fastcampus.investment.component.service.InvestingService;
-import com.fastcampus.investment.exception.IllegalUserException;
+import com.fastcampus.investment.constant.ErrorCode;
+import com.fastcampus.investment.exception.APIException;
 import com.fastcampus.investment.constant.UserInvestingType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,7 @@ class InvestingStatusRepositoryTest {
     @Transactional
     void test_1(){
 
-        UserEntity user = userRepository.findById(1L).orElseThrow(IllegalUserException::new);
+        UserEntity user = userRepository.findById(1L).orElseThrow(() -> new APIException(ErrorCode.INVALID_USER));
         ProductsEntity products = productsRepository.findById(1L).orElseThrow(RuntimeException::new);
 
         InvestingStatusEntity investingStatus = new InvestingStatusEntity();
