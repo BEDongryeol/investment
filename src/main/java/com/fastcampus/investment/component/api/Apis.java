@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class Apis {
     @GetMapping("/investment")
     public ResponseEntity<ResponseDTO<List<InvestingStatusDTO>>> investmentGet
             (
-            @RequestHeader("X-USER-ID") Long userId
+            @RequestHeader("X-USER-ID") @NotNull Long userId
             )
     {
         return ResponseEntity.status(HttpStatus.OK)
@@ -58,9 +59,9 @@ public class Apis {
     @PutMapping("/investment/{productId}")
     public ResponseEntity<ResponseDTO<InvestPutResponseDTO>> investmentPost
         (
-        @RequestHeader("X-USER-ID") Long userId,
-        @PathVariable Long productId,
-        @RequestParam String status
+        @RequestHeader("X-USER-ID") @NotNull Long userId,
+        @PathVariable @NotNull Long productId,
+        @RequestParam @NotBlank String status
         )
     {
         InvestPutRequestDTO investPutRequestDTO = InvestPutRequestDTO.builder()
