@@ -1,6 +1,6 @@
 package com.fastcampus.investment.component.dto.response;
 
-import com.fastcampus.investment.util.type.UserInvestingType;
+import com.fastcampus.investment.constant.UserInvestingType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

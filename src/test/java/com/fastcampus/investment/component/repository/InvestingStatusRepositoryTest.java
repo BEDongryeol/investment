@@ -5,14 +5,12 @@ import com.fastcampus.investment.component.entity.ProductsEntity;
 import com.fastcampus.investment.component.entity.UserEntity;
 import com.fastcampus.investment.component.service.InvestingService;
 import com.fastcampus.investment.exception.IllegalUserException;
-import com.fastcampus.investment.util.type.UserInvestingType;
+import com.fastcampus.investment.constant.UserInvestingType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 
 @SpringBootTest

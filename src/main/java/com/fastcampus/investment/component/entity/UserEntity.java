@@ -1,7 +1,6 @@
 package com.fastcampus.investment.component.entity;
 
-import com.fastcampus.investment.util.type.UserInvestingType;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fastcampus.investment.constant.UserInvestingType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,7 +25,8 @@ public class UserEntity {
     private Long investedAmount = 0L;
 
     @Column
-    private Long holdingAmount;
+    @Builder.Default
+    private Long holdingAmount = 0L;
 
     @Column
     @Builder.Default

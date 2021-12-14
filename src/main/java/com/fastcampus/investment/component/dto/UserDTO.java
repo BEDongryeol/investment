@@ -1,7 +1,7 @@
 package com.fastcampus.investment.component.dto;
 
 import com.fastcampus.investment.component.entity.InvestingStatusEntity;
-import com.fastcampus.investment.util.type.UserInvestingType;
+import com.fastcampus.investment.constant.UserInvestingType;
 import lombok.*;
 
 import java.time.LocalDate;

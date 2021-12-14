@@ -3,7 +3,7 @@ package com.fastcampus.investment.component.service;
 import com.fastcampus.investment.component.dto.request.InvestPostRequestDTO;
 import com.fastcampus.investment.component.entity.UserEntity;
 import com.fastcampus.investment.component.repository.UserRepository;
-import com.fastcampus.investment.util.type.UserInvestingType;
+import com.fastcampus.investment.constant.UserInvestingType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
