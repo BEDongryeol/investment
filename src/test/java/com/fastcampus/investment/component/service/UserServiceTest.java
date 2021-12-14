@@ -1,5 +1,6 @@
 package com.fastcampus.investment.component.service;
 
+import com.fastcampus.investment.component.dto.request.InvestPostRequestDTO;
 import com.fastcampus.investment.component.entity.UserEntity;
 import com.fastcampus.investment.component.repository.UserRepository;
 import com.fastcampus.investment.util.type.UserInvestingType;
@@ -26,12 +27,22 @@ class UserServiceTest {
                         .investedCount(0)
                 .build());
 
-        UserEntity user = userService.payForProduct(1L, 10000L);
+        InvestPostRequestDTO requestDTO = getTestModel();
+
+        UserEntity user = userService.payForProduct(requestDTO);
         System.out.println(user);
 
-        user = userService.payForProduct(1L, 200000L);
+        requestDTO.setInvestAmount(2_000_000L);
+
+        user = userService.payForProduct(requestDTO);
         System.out.println(user);
     }
 
+    private InvestPostRequestDTO getTestModel(){
+        InvestPostRequestDTO requestDTO = new InvestPostRequestDTO();
+        requestDTO.setUserId(1L);
+        requestDTO.setInvestAmount(1_000_000L);
+        return requestDTO;
+    }
 
 }
