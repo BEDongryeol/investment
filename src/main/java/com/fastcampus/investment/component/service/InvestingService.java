@@ -1,6 +1,10 @@
 package com.fastcampus.investment.component.service;
 
+import com.fastcampus.investment.component.dto.request.InvestPostRequestDTO;
+import com.fastcampus.investment.component.dto.request.InvestPutRequestDTO;
 import com.fastcampus.investment.component.dto.InvestingStatusDTO;
+import com.fastcampus.investment.component.dto.response.InvestPutResponseDTO;
+import com.fastcampus.investment.component.dto.response.ResponseDTO;
 import com.fastcampus.investment.component.entity.InvestingStatusEntity;
 import com.fastcampus.investment.component.entity.ProductsEntity;
 import com.fastcampus.investment.component.entity.UserEntity;
@@ -11,7 +15,6 @@ import com.fastcampus.investment.util.type.UserInvestingType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -27,36 +30,44 @@ public class InvestingService {
     private final UserRepository userRepository;
 
 
-    @Transactional(isolation = Isolation.READ_COMMITTED)
-    public InvestingStatusDTO doInvest(Long userId, Long productsId, Long investAmount){
+    @Transactional
+    public ResponseDTO<InvestPutResponseDTO> investPost(InvestPostRequestDTO investPostRequestDTO){
 
-        UserEntity user = userService.payForProduct(userId, investAmount);
+        UserEntity user = userService.payForProduct(investPostRequestDTO);
         ProductsEntity products ;
-
+        UserInvestingType status = user.getStatus();
         // Status 가 FAIL 이면 투자 실패
-        if (user.getStatus() == UserInvestingType.FAIL){
-            products = productService.selectFail(productsId);
+        if (status == UserInvestingType.FAIL){
+            products = productService.selectFail(investPostRequestDTO);
         // 투자 성공 시 투자 상품에 반영
         } else {
-            products = productService.selectProduct(productsId, investAmount);
+            products = productService.selectProduct(investPostRequestDTO);
         }
 
-        return addInvestingStatus(user, products);
+        addInvestingStatus(user, products);
+        log.info("투자 시도 : {}", status);
+        return new ResponseDTO<>(new InvestPutResponseDTO(status));
     }
 
-    @Transactional(isolation = Isolation.READ_COMMITTED)
-    public List<InvestingStatusDTO> getInvest(Long userId){
+    @Transactional
+    public ResponseDTO<List<InvestingStatusDTO>> getInvest(Long userId){
         UserEntity user = userRepository.findById(userId).orElseThrow(IllegalAccessError::new);
-        return InvestingStatusMapper.INSTANCE.toDtoList(user.getInvestingStatus());
+
+        return new ResponseDTO<>(InvestingStatusMapper.INSTANCE.toDtoList(user.getInvestingStatus()));
     }
 
-    @Transactional(isolation = Isolation.READ_COMMITTED)
-    public InvestingStatusEntity updateInvest(Long userId, Long productsId, String status){
-        InvestingStatusEntity entity = investingStatusRepository.findByUserIdAndProductsId(userId, productsId);
-        UserInvestingType type = UserInvestingType.valueOf(status);
-        entity.getUser().setStatus(type);
+    // Service Layer - Entity 리턴 -> Repository Layer -> Service Layer - DTO 변환
+    @Transactional
+    public ResponseDTO<InvestPutResponseDTO> updateInvest(InvestPutRequestDTO investPutRequestDTO){
 
-        return investingStatusRepository.save(entity);
+        // 1. DTO에서 데이터 받아와서 처리
+        InvestingStatusEntity entity = investingStatusRepository
+                .findByUserIdAndProductsId(investPutRequestDTO.getUserId(), investPutRequestDTO.getProductId());
+
+        entity.getUser().setStatus(UserInvestingType.valueOf(investPutRequestDTO.getStatus()));
+        investingStatusRepository.save(entity);
+
+        return new ResponseDTO<>(new InvestPutResponseDTO(UserInvestingType.valueOf(investPutRequestDTO.getStatus())));
     }
 
     public InvestingStatusDTO addInvestingStatus(UserEntity user, ProductsEntity products){
