@@ -11,7 +11,7 @@ import com.fastcampus.investment.component.entity.UserEntity;
 import com.fastcampus.investment.component.repository.InvestingStatusRepository;
 import com.fastcampus.investment.component.repository.UserRepository;
 import com.fastcampus.investment.util.mapper.InvestingStatusMapper;
-import com.fastcampus.investment.util.type.UserInvestingType;
+import com.fastcampus.investment.constant.UserInvestingType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
