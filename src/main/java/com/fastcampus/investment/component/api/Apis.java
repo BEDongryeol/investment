@@ -11,7 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -30,9 +31,9 @@ public class Apis {
     @PostMapping("/investment")
     public ResponseEntity<ResponseDTO<InvestPutResponseDTO>> investmentPost
             (
-            @RequestHeader("X-USER-ID") Long userId,
-            @RequestParam Long productId,
-            @RequestParam Long investAmount
+            @RequestHeader("X-USER-ID") @NotNull Long userId,
+            @RequestParam @NotNull Long productId,
+            @RequestParam @Min(1L) Long investAmount
             )
     {
         InvestPostRequestDTO investPostRequestDTO = InvestPostRequestDTO.builder()
