@@ -41,7 +41,7 @@ class ProductServiceTest {
         productsRepository.findAll().forEach(System.out::println);
         System.out.println("====================");
 
-        ResponseDTO<List<ProductsDTO>> responseDTO = productService.getValidProducts();
+        ResponseDTO<List<ProductsDTO>> responseDTO = (ResponseDTO<List<ProductsDTO>>) productService.getValidProducts();
         System.out.println(responseDTO);
         System.out.println(responseDTO.getData());
 
