@@ -16,12 +16,10 @@ public class InvestingStatusEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private UserEntity user;
 
-    @ManyToOne
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private ProductsEntity products;
 
     @Column(updatable = false)
