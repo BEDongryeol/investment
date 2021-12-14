@@ -18,7 +18,7 @@ public class AfterReturningAspect {
                   , returning = "returnObj")
     public void afterReturning(JoinPoint joinPoint, Object returnObj)
     {
-        log.info( "[AfterReturning At Service]"
+        log.info( "\n[AfterReturning At Service]"
                 + "\n>>> Method Name : " + joinPoint.getSignature().getName()
                 + "\n>>> Args : " + Arrays.toString(joinPoint.getArgs())
                 + "\n>>> Return Value : " + returnObj);
@@ -29,7 +29,7 @@ public class AfterReturningAspect {
                    ,returning = "returnObj")
     public void afterReturnAtController(JoinPoint joinPoint, Object returnObj)
     {
-        log.info( "[AfterReturning At API]"
+        log.info( "\n[AfterReturning At API]"
                 + "\n>>> Method Name : " + joinPoint.getSignature().getName()
                 + "\n>>> Args : " + Arrays.toString(joinPoint.getArgs())
                 + "\n>>> Return Value : " + returnObj);
