@@ -1,12 +1,15 @@
 package com.fastcampus.investment.component.api;
 
-import com.fastcampus.investment.component.dto.InvestingStatusDTO;
-import com.fastcampus.investment.component.dto.ProductsDTO;
-import com.fastcampus.investment.component.dto.ResponseDTO;
+import com.fastcampus.investment.component.dto.*;
+import com.fastcampus.investment.component.dto.request.InvestPostRequestDTO;
+import com.fastcampus.investment.component.dto.request.InvestPutRequestDTO;
+import com.fastcampus.investment.component.dto.response.InvestPutResponseDTO;
+import com.fastcampus.investment.component.dto.response.ResponseDTO;
 import com.fastcampus.investment.component.service.InvestingService;
 import com.fastcampus.investment.component.service.ProductService;
-import com.fastcampus.investment.util.mapper.InvestingStatusMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,38 +24,50 @@ public class Apis {
 
     @GetMapping("/product")
     public ResponseDTO<List<ProductsDTO>> productGet(){
-        return productService.lookupValidProducts();
+        return productService.getValidProducts();
     }
 
     @PostMapping("/investment")
-    public ResponseDTO<InvestingStatusDTO> investmentPost(
+    public ResponseEntity<ResponseDTO<InvestPutResponseDTO>> investmentPost
+            (
             @RequestHeader("X-USER-ID") Long userId,
             @RequestParam Long productId,
-            @RequestParam Long investAmount)
+            @RequestParam Long investAmount
+            )
     {
-        // post를 하면 성공한 invest 출력
-        return new ResponseDTO<>(investingService.doInvest(userId, productId, investAmount));
+        InvestPostRequestDTO investPostRequestDTO = InvestPostRequestDTO.builder()
+                .userId(userId)
+                .productId(productId)
+                .investAmount(investAmount)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(investingService.investPost(investPostRequestDTO));
     }
 
     @GetMapping("/investment")
-    public ResponseDTO<List<InvestingStatusDTO>> investmentGet
+    public ResponseEntity<ResponseDTO<List<InvestingStatusDTO>>> investmentGet
             (
             @RequestHeader("X-USER-ID") Long userId
             )
     {
-        return new ResponseDTO<>(investingService.getInvest(userId));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(investingService.getInvest(userId));
     }
 
     @PutMapping("/investment/{productId}")
-    public ResponseDTO<InvestingStatusDTO> investmentPost(
-            @RequestHeader("X-USER-ID") Long userId,
-            @PathVariable Long productId,
-            @RequestParam String status
-    )
+    public ResponseEntity<ResponseDTO<InvestPutResponseDTO>> investmentPost
+        (
+        @RequestHeader("X-USER-ID") Long userId,
+        @PathVariable Long productId,
+        @RequestParam String status
+        )
     {
-        return new ResponseDTO<>
-                (InvestingStatusMapper.INSTANCE.toDto
-                        (investingService.updateInvest(userId, productId, status)));
+        InvestPutRequestDTO investPutRequestDTO = InvestPutRequestDTO.builder()
+                .userId(userId)
+                .productId(productId)
+                .status(status)
+                .build();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(investingService.updateInvest(investPutRequestDTO));
     }
-
 }
