@@ -10,7 +10,8 @@ import java.util.List;
 public interface ProductsRepository extends JpaRepository<ProductsEntity, Long> {
 
     @Query (value = "select P FROM ProductsEntity P " +
-                    "where startedAt <= current_date and finishedAt >= current_date ")
+                    "where startedAt <= current_date and finishedAt >= current_date " +
+                    "and P.investedAmount <> P.totalInvestAmount")
     List<ProductsEntity> getValidProducts();
 
 

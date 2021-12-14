@@ -1,18 +1,17 @@
 package com.fastcampus.investment.component.service;
 
+import com.fastcampus.investment.component.dto.request.InvestPostRequestDTO;
 import com.fastcampus.investment.component.dto.ProductsDTO;
-import com.fastcampus.investment.component.dto.ResponseDTO;
+import com.fastcampus.investment.component.dto.response.ResponseDTO;
 import com.fastcampus.investment.component.entity.ProductsEntity;
 import com.fastcampus.investment.component.repository.ProductsRepository;
 import com.fastcampus.investment.util.mapper.ProductsMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,46 +19,44 @@ public class ProductService {
 
     private final ProductsRepository productsRepository;
 
-    @Transactional(isolation = Isolation.READ_COMMITTED)
-    public ResponseDTO<List<ProductsDTO>> lookupValidProducts(){
+    // Service Layer -> Web Layer (DTO 리턴)
+    @Transactional
+    public ResponseDTO<List<ProductsDTO>> getValidProducts(){
 
-        // 1. 유효한 모집기간 상품 조회
+        // 유효한 모집기간 상품 조회
         List<ProductsEntity> products = productsRepository.getValidProducts();
-        // 2. 총 투자 금액이 total 과 같은지 비교하여 제거
-        products.removeIf(product -> product.getTotalInvestAmount() == product.getInvestedAmount());
-
-        List<ProductsDTO> productsDTOS = new ArrayList<>();
-
-        for (ProductsEntity productsEntity : products){
-            productsDTOS.add(ProductsMapper.INSTANCE.toDto(productsEntity));
-        }
-
-        return new ResponseDTO<>(productsDTOS);
+        // Mapping 후 return
+        return new ResponseDTO<>(
+            products.stream()
+                    .map(ProductsMapper.INSTANCE::toDto)
+                    .collect(Collectors.toList())
+        );
     }
 
-    @Transactional(isolation = Isolation.READ_COMMITTED)
-    public ProductsEntity selectProduct(Long productsId, Long investAmount){
+    // Service Layer -> Service Layer (Entity 리턴)
+    @Transactional
+    public ProductsEntity selectProduct(InvestPostRequestDTO investPostRequestDTO){
 
-        // 1. 유효한 모집기간 상품 조회
+        Long productsId = investPostRequestDTO.getProductId();
+
+        // 1. 유효한 상품 조회
         List<ProductsEntity> products = productsRepository.getValidProducts();
-        // 2. 총 투자 금액이 total 과 같은지 비교하여 제거
-        products.removeIf(product -> product.getTotalInvestAmount() == product.getInvestedAmount());
 
-        ProductsEntity productsEntity = productsRepository.getById(productsId);
+        ProductsEntity productsEntity =
+                productsRepository.getById(productsId);
 
         if (products.contains(productsEntity)) {
-            productsEntity.setInvestedAmount(productsEntity.getInvestedAmount()+investAmount);
+            productsEntity.setInvestedAmount(productsEntity.getInvestedAmount()+ investPostRequestDTO.getInvestAmount());
             productsEntity.setInvestedCount(productsEntity.getInvestedCount()+1);
-
             return productsEntity;
         }
-
         return null;
     }
 
-    public ProductsEntity selectFail(Long productsId){
-        return productsRepository.getById(productsId);
+    // Service Layer -> Service Layer (Entity 리턴)
+    public ProductsEntity selectFail(InvestPostRequestDTO investPostRequestDTO){
+        Long productId = investPostRequestDTO.getProductId();
+        return productsRepository.getById(productId);
     }
-
 
 }
