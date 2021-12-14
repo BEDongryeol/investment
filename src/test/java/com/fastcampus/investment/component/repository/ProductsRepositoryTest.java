@@ -34,7 +34,13 @@ class ProductsRepositoryTest {
     @DisplayName("날짜가 유효한 상품 조회")
     @Test
     void test_2(){
+        ProductsEntity entity = productsRepository.findById(1L).get();
+        entity.setInvestedAmount(100000000L);
+        productsRepository.save(entity);
+
         List<ProductsEntity> products = productsRepository.getValidProducts();
+
+
         products.forEach(System.out::println);
 
     }

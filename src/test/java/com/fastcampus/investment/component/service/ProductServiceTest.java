@@ -1,7 +1,7 @@
 package com.fastcampus.investment.component.service;
 
 import com.fastcampus.investment.component.dto.ProductsDTO;
-import com.fastcampus.investment.component.dto.ResponseDTO;
+import com.fastcampus.investment.component.dto.response.ResponseDTO;
 import com.fastcampus.investment.component.entity.ProductsEntity;
 import com.fastcampus.investment.component.repository.ProductsRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -41,7 +41,7 @@ class ProductServiceTest {
         productsRepository.findAll().forEach(System.out::println);
         System.out.println("====================");
 
-        ResponseDTO<List<ProductsDTO>> responseDTO = productService.lookupValidProducts();
+        ResponseDTO<List<ProductsDTO>> responseDTO = productService.getValidProducts();
         System.out.println(responseDTO);
         System.out.println(responseDTO.getData());
 

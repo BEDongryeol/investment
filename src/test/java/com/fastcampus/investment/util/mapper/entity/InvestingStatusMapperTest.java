@@ -1,7 +1,7 @@
 package com.fastcampus.investment.util.mapper.entity;
 
 import com.fastcampus.investment.component.dto.InvestingStatusDTO;
-import com.fastcampus.investment.component.dto.ResponseDTO;
+import com.fastcampus.investment.component.dto.response.ResponseDTO;
 import com.fastcampus.investment.component.entity.InvestingStatusEntity;
 import com.fastcampus.investment.component.entity.ProductsEntity;
 import com.fastcampus.investment.component.entity.UserEntity;
@@ -16,8 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class InvestingStatusMapperTest {
