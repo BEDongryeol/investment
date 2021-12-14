@@ -3,13 +3,14 @@ package com.fastcampus.investment.component.service;
 import com.fastcampus.investment.component.dto.request.InvestPostRequestDTO;
 import com.fastcampus.investment.component.entity.UserEntity;
 import com.fastcampus.investment.component.repository.UserRepository;
-import com.fastcampus.investment.exception.IllegalUserException;
+import com.fastcampus.investment.exception.APIException;
 import com.fastcampus.investment.constant.UserInvestingType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import static com.fastcampus.investment.constant.ErrorCode.INVALID_USER;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +24,9 @@ public class UserService {
         // Model에서 값 받아서 설정
         Long investAmount = InvestPostRequestDTO.getInvestAmount();
         Long userId = InvestPostRequestDTO.getUserId();
-        UserEntity user = userRepository.findById(userId).orElseThrow(IllegalUserException::new);
+
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new APIException(INVALID_USER));
 
         // 투자 금액 초과, 잔액 부족 시 실패
         if (!isValidUser(user, investAmount))
